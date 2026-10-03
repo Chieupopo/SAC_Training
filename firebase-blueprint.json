@@ -1,0 +1,132 @@
+{
+  "entities": {
+    "UserAccount": {
+      "title": "UserAccount",
+      "description": "Enterprise employee training profile and assigned role",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 150 },
+        "email": { "type": "string", "maxLength": 200 },
+        "role": { "type": "string", "maxLength": 50 },
+        "department": { "type": "string", "maxLength": 50 },
+        "position": { "type": "string", "maxLength": 100 },
+        "joinDate": { "type": "string", "maxLength": 20 },
+        "assignedTrackId": { "type": "string", "maxLength": 50 },
+        "completionRate": { "type": "number" },
+        "averageScore": { "type": "number" },
+        "completedCoursesCount": { "type": "number" },
+        "totalAssignedCourses": { "type": "number" },
+        "lastActive": { "type": "string", "maxLength": 50 },
+        "status": { "type": "string", "maxLength": 20 }
+      },
+      "required": ["id", "name", "email", "role", "department", "completionRate", "averageScore"]
+    },
+    "RoleConfig": {
+      "title": "RoleConfig",
+      "description": "RBAC role configuration with granular permission array",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 50 },
+        "name": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "maxLength": 50 },
+        "badgeColor": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 300 }
+      },
+      "required": ["id", "name", "title"]
+    },
+    "TrainingCourse": {
+      "title": "TrainingCourse",
+      "description": "Product training curriculum for Sales and Technical departments",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "code": { "type": "string", "maxLength": 20 },
+        "title": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 50 },
+        "level": { "type": "string", "maxLength": 30 },
+        "estimatedHours": { "type": "number" },
+        "description": { "type": "string", "maxLength": 1000 },
+        "contentType": { "type": "string", "maxLength": 30 },
+        "youtubeUrl": { "type": "string", "maxLength": 500 },
+        "videoDuration": { "type": "string", "maxLength": 50 },
+        "pdfSlideName": { "type": "string", "maxLength": 200 },
+        "pdfSlidePagesCount": { "type": "number" },
+        "pdfSlideUrl": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["id", "code", "title", "category"]
+    },
+    "CourseProgressRecord": {
+      "title": "CourseProgressRecord",
+      "description": "Learner progress and quiz completion record",
+      "type": "object",
+      "properties": {
+        "courseId": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "maxLength": 30 },
+        "progressPercentage": { "type": "number" },
+        "quizScore": { "type": "number" },
+        "quizPassed": { "type": "boolean" },
+        "attemptsCount": { "type": "number" },
+        "dueDate": { "type": "string", "maxLength": 30 }
+      },
+      "required": ["courseId", "userId", "status", "progressPercentage"]
+    },
+    "ReminderRule": {
+      "title": "ReminderRule",
+      "description": "Automated roadmap reminder rule configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "triggerDaysBeforeDue": { "type": "number" },
+        "frequency": { "type": "string", "maxLength": 30 },
+        "isActive": { "type": "boolean" },
+        "targetDepartment": { "type": "string", "maxLength": 50 },
+        "messageTemplate": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["id", "title", "isActive", "messageTemplate"]
+    },
+    "InAppNotification": {
+      "title": "InAppNotification",
+      "description": "In-app learning reminder and roadmap alert",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "message": { "type": "string", "maxLength": 500 },
+        "type": { "type": "string", "maxLength": 50 },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "userId", "title", "message", "read"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserAccount" },
+      "description": "Registered employee profile, permissions and learning stats"
+    },
+    "/roles/{roleId}": {
+      "schema": { "$ref": "#/entities/RoleConfig" },
+      "description": "Role configurations and permission sets"
+    },
+    "/courses/{courseId}": {
+      "schema": { "$ref": "#/entities/TrainingCourse" },
+      "description": "Sales and Technical product training courses"
+    },
+    "/progress/{progressId}": {
+      "schema": { "$ref": "#/entities/CourseProgressRecord" },
+      "description": "Employee course progression and quiz performance records"
+    },
+    "/reminder_rules/{ruleId}": {
+      "schema": { "$ref": "#/entities/ReminderRule" },
+      "description": "Automated reminder rules and dispatch criteria"
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/InAppNotification" },
+      "description": "In-app alerts and quiz milestone notifications"
+    }
+  }
+}

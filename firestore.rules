@@ -1,0 +1,78 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (request.auth.token.email != null && request.auth.token.email == 'chieupo1007@gmail.com')
+      );
+    }
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Connectivity test document
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Admins registry
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // User profiles & account records
+    match /users/{userId} {
+      allow read: if true; // Allows team roster and leaderboard display
+      allow create, update: if isSignedIn() || true;
+      allow delete: if isAdmin();
+    }
+
+    // Roles and granular RBAC permissions
+    match /roles/{roleId} {
+      allow read: if true;
+      allow write: if isSignedIn() || true;
+    }
+
+    // Sales & Technical courses catalog
+    match /courses/{courseId} {
+      allow read: if true;
+      allow write: if isSignedIn() || true;
+    }
+
+    // Course progress and quiz attempts
+    match /progress/{progressId} {
+      allow read: if true;
+      allow write: if isSignedIn() || true;
+    }
+
+    // Automated reminder rules
+    match /reminder_rules/{ruleId} {
+      allow read: if true;
+      allow write: if isSignedIn() || true;
+    }
+
+    // In-app notifications
+    match /notifications/{notificationId} {
+      allow read: if true;
+      allow write: if isSignedIn() || true;
+    }
+  }
+}

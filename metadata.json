@@ -1,0 +1,6 @@
+{
+  "name": "NexusLearn - Hệ Thống Đào Tạo & Phân Quyền Nhân Sự",
+  "description": "Nền tảng đào tạo sản phẩm Sales & Technical hiện đại với bảng điều khiển theo dõi tiến độ, biểu đồ hiệu suất, phân quyền tài khoản chi tiết và bài thi trắc nghiệm.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
